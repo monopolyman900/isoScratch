@@ -33,6 +33,9 @@ public class MapGenerator {
 	//round each tile's height to a multiple of this
 	int heightRounder;
 	
+	//multiply each tile's height value by this - to increase or decrease height differences
+	int heightMultiplier;
+	
 	//minimum ocean height
 	int oceanHeight;
 	
@@ -44,7 +47,7 @@ public class MapGenerator {
 	BufferedImage tileImg = null;
 	
 	//initialize and generate map into existing chunks
-	public MapGenerator(HashMap<Pair<Integer, Integer>, Region> regions, int regionSize, int regionCountX, int regionCountY, int chunkSize, int heightRounder, int oceanHeight, int seed) {
+	public MapGenerator(HashMap<Pair<Integer, Integer>, Region> regions, int regionSize, int regionCountX, int regionCountY, int chunkSize, int heightRounder, int oceanHeight, int heightMultiplier, int seed) {
 		this.regions = regions;
 		this.regionSize = regionSize;
 		this.regionCountX = regionCountX;
@@ -52,6 +55,7 @@ public class MapGenerator {
 		this.chunkSize = chunkSize;
 		this.heightRounder = heightRounder;
 		this.oceanHeight = oceanHeight;
+		this.heightMultiplier = heightMultiplier;
 		this.seed = seed;
 		generateMap();
 	}
@@ -96,7 +100,7 @@ public class MapGenerator {
 				Tile curTile = regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY);
 				//debugging values
 				int doubleRoundedValue = (int) (Math.rint((double) roundedValue / heightRounder) * heightRounder) - 100;
-				regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY).val = doubleRoundedValue;
+				regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY).val = (doubleRoundedValue * heightMultiplier);
 				regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY).absTileX = x;
 				regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY).absTileY = y;
 				regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY).chunkX = curChunkX;
@@ -173,7 +177,7 @@ public class MapGenerator {
 		
 		//ocean min height
 		if(doubleRoundedValue < oceanHeight) doubleRoundedValue = oceanHeight;
-		tile.val = doubleRoundedValue;
+		tile.val = (doubleRoundedValue * heightMultiplier);
 		//debugging values
 		tile.absTileX = x;
 		tile.absTileY = y;

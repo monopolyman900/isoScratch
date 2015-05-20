@@ -96,7 +96,7 @@ public class MapManager {
 				loadedRegions.put(regionIndexes, initialRegion);
 			}
 		}
-		mapGenerator = new MapGenerator(loadedRegions, regionSize, regionCountX, regionCountY, chunkSize, heightRounder, oceanHeight, seed);
+		mapGenerator = new MapGenerator(loadedRegions, regionSize, regionCountX, regionCountY, chunkSize, heightRounder, oceanHeight, heightMultiplier, seed);
 		//loop back through and set chunk sizes in each region and region position now that tile size is set
 		regionIter = loadedRegions.entrySet().iterator();
 		while(regionIter.hasNext()) {

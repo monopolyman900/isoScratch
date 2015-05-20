@@ -24,7 +24,7 @@ public class GameProperties implements Serializable{
 	
 	//number to round tile height to, amount to multipy tile height by in pixels
 	public final int HEIGHT_ROUNDER = 1;
-	public final int HEIGHT_MULTIPLIER = 1;
+	public final int HEIGHT_MULTIPLIER = 10;
 	
 	//minimum ocean height
 	public final int OCEAN_HEIGHT = 10;
