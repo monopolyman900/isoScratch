@@ -43,12 +43,12 @@ public class GameProperties implements Serializable{
 
 	public GameProperties() {
 		BufferedImage sampleTile = im.loadImage("Images/Tiles/grassTile.png");
-		if(this.hardTileWidth == null) {
+		if(this.hardTileWidth != null) {
 			this.tileWidth = this.hardTileWidth;
 		} else {
 			this.tileWidth = sampleTile.getWidth();
 		}
-		if(this.hardTileHeight == null) {
+		if(this.hardTileHeight != null) {
 			this.tileHeight = this.hardTileHeight;
 		} else {
 			this.tileHeight = sampleTile.getHeight();
