@@ -9,7 +9,7 @@ import utilities.ImageManipulator;
 public class Chunk {
 	ImageManipulator im = new ImageManipulator();
 	
-	Region parentRegion;
+	public Region parentRegion;
 	
 	//actual coordinate of top left corner of tile *image*
 	int pixelX;
@@ -27,6 +27,8 @@ public class Chunk {
 	//width and height in pixels
 	int width;
 	int height;
+	
+	public Integer val = 0;
 	
 	//decides whether to draw or not
 	boolean onScreen;

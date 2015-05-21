@@ -25,6 +25,8 @@ public class Region {
 	int height;
 	int width;
 	
+	public Integer val = 0;
+	
 	//decides whether to draw or not
 	boolean onScreen;
 	boolean isLoaded = false;

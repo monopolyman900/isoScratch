@@ -107,6 +107,15 @@ public class MapGenerator {
 				regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY).chunkY = curChunkY;
 				regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY).regionX = curIndex.left;
 				regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY).regionY = curIndex.right;
+				
+				//update chunk val
+				if(regions.get(curIndex) != null && regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).val < curTile.val) {
+					regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).val = curTile.val;
+				}
+				//update region val
+				if(regions.get(curIndex).val < curTile.val) {
+					regions.get(curIndex).val = curTile.val;
+				}
 
 				setTileImage(doubleRoundedValue);
 				curTile.setImage(this.tileImg);
@@ -177,7 +186,16 @@ public class MapGenerator {
 		
 		//ocean min height
 		if(doubleRoundedValue < oceanHeight) doubleRoundedValue = oceanHeight;
+		
 		tile.val = (doubleRoundedValue * heightMultiplier);
+		//set chunk val
+		if(tile.parentChunk.val < tile.val) {
+			tile.parentChunk.val = tile.val;
+		}
+		//set region val
+		if(tile.parentChunk.parentRegion.val < tile.val) {
+			tile.parentChunk.parentRegion.val = tile.val;
+		}
 		//debugging values
 		tile.absTileX = x;
 		tile.absTileY = y;
