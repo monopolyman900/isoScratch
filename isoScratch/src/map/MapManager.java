@@ -141,8 +141,9 @@ public class MapManager {
 			//southernY region position + YOffset + y distance to the west + then y distance south + chunk height for southernmost chunk
 			//westernX is base region position + XOffset - distance to the west
 			//easternX is base region position + XOffset + distance to the east + 1 more chunk for easternmost chunk - I'm not sure why but this isn't needed for west
-			int northernY = curRegion.pixelY + curRegion.getYOffset();
+			int northernY = curRegion.pixelY + curRegion.getYOffset() - 500;
 			int southernY = curRegion.pixelY + curRegion.getYOffset() + (yMax*(chunkHeight/2)) + (xMax*(chunkHeight/2)) + chunkHeight;
+			if(curRegion.val != null) southernY -= curRegion.val;
 			int westernX = curRegion.pixelX + curRegion.getXOffset() - (yMax*(chunkWidth/2));
 			int easternX = curRegion.pixelX + curRegion.getXOffset() + (xMax*(chunkWidth/2) + (chunkWidth));
 			
@@ -171,8 +172,9 @@ public class MapManager {
 						//set pixelX, pixelY of chunk before evaluating onscreen
 						curChunk.setPosInRegion(k, l);
 						boolean chunkOnScreen = true;
-						int northernChunkY = curChunk.pixelY + curRegion.yOffset;
+						int northernChunkY = curChunk.pixelY + curRegion.yOffset - 500;
 						int southernChunkY = curChunk.pixelY + curRegion.yOffset + chunkHeight;
+						if(curChunk.val != null) southernChunkY -= curChunk.val;
 						//TODO: in theory the next line shouldn't need the "- chunkWidth" part. But displays weird without it. - remove
 						int westernChunkX = curChunk.pixelX + curRegion.xOffset - chunkWidth;
 						int easternChunkX = curChunk.pixelX + curRegion.xOffset + chunkWidth;
@@ -200,11 +202,9 @@ public class MapManager {
 									//set pixelX, pixelY of tile before evaluating onscreen
 									curTile.setPosInChunk(m, n, this.tileWidth, this.tileHeight);
 									boolean tileOnScreen = true;
-									int northernTileY = curTile.pixelY + curChunk.yOffset;
-									if(curTile.val != null) northernTileY -= curTile.val;
+									int northernTileY = curTile.pixelY + curChunk.yOffset - 500;
 									//TODO: I shouldn't need the curTile.height added twice here but it renders weird without it
 									int southernTileY = curTile.pixelY + curChunk.yOffset + curTile.height + curTile.height;
-									if(curTile.val != null) northernTileY -= curTile.val;
 									int westernTileX = curTile.pixelX + curChunk.xOffset;
 									//TODO: same kind of issue as above
 									int easternTileX = curTile.pixelX + curChunk.xOffset + curTile.width + curTile.width;
@@ -240,7 +240,6 @@ public class MapManager {
 		loadedRegions.putAll(tmpRegions);
 	}
 	
-	//Haven't really thought through how this will work in detail
 	//x and y of current chunk - xIndex, yIndex of current region
 	public void setLoadedRegions(int x, int y, int xIndex, int yIndex) {
 		
