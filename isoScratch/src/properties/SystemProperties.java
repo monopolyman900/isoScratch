@@ -11,7 +11,7 @@ import java.io.File;
 public class SystemProperties {
 	
 	//currently only shows abs value of tile position
-	public final boolean DEBUG_MAP = true;
+	public final boolean DEBUG_MAP = false;
 	
 	//deletes map and regenerates every time the program is run if true
 	public final boolean REGEN_MAP = true;
