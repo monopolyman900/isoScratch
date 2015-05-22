@@ -116,9 +116,6 @@ public class MapManager {
 	//see if chunk parameter needs to be drawn or not
 	public void setOnScreen() {
 		
-		//biggest tile height currently displayed
-		int maxHeight = 0;
-		
 		//copy regions map to tmp regions map - alter tmp regions, replace loadedRegions with tmp
 		tmpRegions.clear();
 		tmpRegions.putAll(loadedRegions);
@@ -144,8 +141,9 @@ public class MapManager {
 			//southernY region position + YOffset + y distance to the west + then y distance south + chunk height for southernmost chunk
 			//westernX is base region position + XOffset - distance to the west
 			//easternX is base region position + XOffset + distance to the east + 1 more chunk for easternmost chunk - I'm not sure why but this isn't needed for west
-			int northernY = curRegion.pixelY + curRegion.getYOffset() - maxHeight;
+			int northernY = curRegion.pixelY + curRegion.getYOffset() - 500;
 			int southernY = curRegion.pixelY + curRegion.getYOffset() + (yMax*(chunkHeight/2)) + (xMax*(chunkHeight/2)) + chunkHeight;
+			if(curRegion.val != null) southernY -= curRegion.val;
 			int westernX = curRegion.pixelX + curRegion.getXOffset() - (yMax*(chunkWidth/2));
 			int easternX = curRegion.pixelX + curRegion.getXOffset() + (xMax*(chunkWidth/2) + (chunkWidth));
 			
@@ -174,8 +172,9 @@ public class MapManager {
 						//set pixelX, pixelY of chunk before evaluating onscreen
 						curChunk.setPosInRegion(k, l);
 						boolean chunkOnScreen = true;
-						int northernChunkY = curChunk.pixelY + curRegion.yOffset - maxHeight;
+						int northernChunkY = curChunk.pixelY + curRegion.yOffset - 500;
 						int southernChunkY = curChunk.pixelY + curRegion.yOffset + chunkHeight;
+						if(curChunk.val != null) southernChunkY -= curChunk.val;
 						//TODO: in theory the next line shouldn't need the "- chunkWidth" part. But displays weird without it. - remove
 						int westernChunkX = curChunk.pixelX + curRegion.xOffset - chunkWidth;
 						int easternChunkX = curChunk.pixelX + curRegion.xOffset + chunkWidth;
@@ -203,7 +202,7 @@ public class MapManager {
 									//set pixelX, pixelY of tile before evaluating onscreen
 									curTile.setPosInChunk(m, n, this.tileWidth, this.tileHeight);
 									boolean tileOnScreen = true;
-									int northernTileY = curTile.pixelY + curChunk.yOffset - maxHeight;
+									int northernTileY = curTile.pixelY + curChunk.yOffset - 500;
 									//TODO: I shouldn't need the curTile.height added twice here but it renders weird without it
 									int southernTileY = curTile.pixelY + curChunk.yOffset + curTile.height + curTile.height;
 									int westernTileX = curTile.pixelX + curChunk.xOffset;
@@ -221,15 +220,11 @@ public class MapManager {
 									else if(easternTileX < 0) {
 										tileOnScreen = false;
 									}
-									//if(!curTile.onScreen && curTile.val != null && curTile.val == maxHeight) maxHeight = 0;
 									curTile.setOnScreen(tileOnScreen);
 									//generate new tile images when needed
 									if(curTile.onScreen && curTile.tileImg == null) {
 										//passing in tile object, indexes: TileX, TileY, ChunkX, ChunkY, RegionX, RegionY
 										mapGenerator.generateTile(curTile, m, n, k, l, curEntry.getKey().left, curEntry.getKey().right);
-									}
-									if(curTile.onScreen) {
-										if(curTile.val != null && curTile.val > maxHeight) maxHeight = curTile.val;
 									}
 								}
 							}
