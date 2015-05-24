@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.Pair;
@@ -26,10 +27,13 @@ public class MapManager {
 	//First dimension of chunks is X axis, second is Y
 	//all relevant region objects
 	Iterator<Entry<Pair<Integer, Integer>, Region>> regionIter;
+	Iterator<Entry<Pair<Integer,Integer>, Region>> tmpIter;
 	//tmp map to add to while looping through original
 	HashMap<Pair<Integer, Integer>, Region> tmpRegions = new HashMap<Pair<Integer, Integer>, Region>();
+	//sorted regions by x, y
+	LinkedHashMap<Pair<Integer, Integer>, Region> sortedRegions = new LinkedHashMap<Pair<Integer, Integer>, Region>();
 	//loaded regions - 2 dimensional map -> x/y Pair, and region
-	public HashMap<Pair<Integer, Integer>, Region> loadedRegions = new HashMap<Pair<Integer, Integer>, Region>();
+	public LinkedHashMap<Pair<Integer, Integer>, Region> loadedRegions = new LinkedHashMap<Pair<Integer, Integer>, Region>();
 	
 	public GameProperties gameProperties;
 	
@@ -242,7 +246,12 @@ public class MapManager {
 			}
 		}
 		loadedRegions.clear();
-		loadedRegions.putAll(tmpRegions);
+		sortedRegions.clear();
+		//sort regions increasing by x, then y starting from smallest of both - loads values to sorted regions
+		while(tmpRegions.size() > 0) {
+			sortRegions(tmpRegions);
+		}
+		loadedRegions.putAll(sortedRegions);
 	}
 	
 	//x and y of current chunk - xIndex, yIndex of current region
@@ -284,5 +293,30 @@ public class MapManager {
 			newRegion.setPixelPosFromIndex((Integer) curPair.left, (Integer) curPair.right);
 			tmpRegions.put(curPair, newRegion);
 		}
+	}
+	
+	//may not really need this, this was added to fix issue where regions weren't drawing in the right order - may just be able to fix this by using LinkedHashMaps instead of normal
+	public void sortRegions(HashMap<Pair<Integer, Integer>, Region> tmpRegions) {
+		//loop through all regions present, find the next value, remove from tmpRegions, add to sortedRegions
+		tmpIter = tmpRegions.entrySet().iterator();
+		//next entry to add to sorted regions
+		Entry<Pair<Integer, Integer>, Region> nextEntry = null;
+		Pair<Integer,Integer> nextPair = null;
+		while(tmpIter.hasNext()) {
+			Entry<Pair<Integer, Integer>, Region> curEntry = tmpIter.next();
+			Pair<Integer,Integer> curPair = curEntry.getKey();
+			//grab first entry available to start off
+			if(nextEntry == null) {
+				nextEntry = curEntry;
+				nextPair = nextEntry.getKey();
+			} else {
+				if(curPair.left < nextPair.left || (curPair.left == nextPair.left && curPair.right < nextPair.right)) {
+					nextEntry = curEntry;
+					nextPair = nextEntry.getKey();
+				}
+			}
+		}
+		tmpRegions.remove(nextPair);
+		sortedRegions.put(nextEntry.getKey(), nextEntry.getValue());
 	}
 }

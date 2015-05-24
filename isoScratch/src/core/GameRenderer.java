@@ -38,7 +38,10 @@ public class GameRenderer {
 			if(gameManager.mapManager != null) {
 				Iterator<Entry<Pair<Integer, Integer>, Region>> regionIter  = gameManager.mapManager.loadedRegions.entrySet().iterator();
 				while(regionIter.hasNext()) {
-					Region curRegion = regionIter.next().getValue();
+					Entry<Pair<Integer,Integer>, Region> curRecord = regionIter.next();
+					Pair<Integer,Integer> curIndex = curRecord.getKey();
+					Region curRegion = curRecord.getValue();
+					System.out.println(curIndex);
 					curRegion.draw(g);
 				}
 			}
@@ -58,7 +61,9 @@ public class GameRenderer {
 		if(gameManager.mapManager != null) {
 			Iterator<Entry<Pair<Integer, Integer>, Region>> regionIter  = gameManager.mapManager.loadedRegions.entrySet().iterator();
 			while(regionIter.hasNext()) {
-				Region curRegion = regionIter.next().getValue();
+				Entry<Pair<Integer,Integer>, Region> curRecord = regionIter.next();
+				Pair<Integer,Integer> curIndex = curRecord.getKey();
+				Region curRegion = curRecord.getValue();
 				curRegion.debugDraw(g);
 			}
 		}
