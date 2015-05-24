@@ -41,7 +41,6 @@ public class GameRenderer {
 					Entry<Pair<Integer,Integer>, Region> curRecord = regionIter.next();
 					Pair<Integer,Integer> curIndex = curRecord.getKey();
 					Region curRegion = curRecord.getValue();
-					System.out.println(curIndex);
 					curRegion.draw(g);
 				}
 			}

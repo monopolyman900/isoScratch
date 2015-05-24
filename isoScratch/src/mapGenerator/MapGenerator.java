@@ -100,6 +100,8 @@ public class MapGenerator {
 				Tile curTile = regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY);
 				//debugging values
 				int doubleRoundedValue = (int) (Math.rint((double) roundedValue / heightRounder) * heightRounder) - 100;
+				//ocean min height
+				if(doubleRoundedValue < oceanHeight) doubleRoundedValue = oceanHeight;
 				regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY).val = (doubleRoundedValue * heightMultiplier);
 				regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY).absTileX = x;
 				regions.get(curIndex).chunks.get(curChunkX).get(curChunkY).tiles.get(curTileX).get(curTileY).absTileY = y;
